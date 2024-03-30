@@ -33,11 +33,23 @@ movies = [
     {'title' : 'The Pork of Music', 'year' : '2012'},
 ]
 
+# 模板上下文处理函数
+# 这个函数返回的变量（以字典键值对的形式）将会统一注入到每一个模板的上下文环境中，因此可以直接在模板中使用。
+@app.context_processor
+def inject_user(): # 函数名可以任意修改
+    user = User.query.first()
+    return dict(user=user) # 需要返回字典，等同于 return {'user': user}
+
+# 404 错误处理函数
+@app.errorhandler(404) # 传入要处理的错误代码
+def page_not_found(e): # 接受异常对象作为参数
+    user = User.query.first()
+    return render_template('404.html'), 404 # 返回模板和状态码
+
 @app.route('/')
 def index():
-    user = User.query.first() # 读取用户记录
     movies = Movie.query.all() # 读取所有电影记录
-    return render_template('index.html', user=user, movies=movies)
+    return render_template('index.html', movies=movies)
 
 # @app.route('/')
 # @app.route('/index')
@@ -58,6 +70,7 @@ def test_url_for():
     print(url_for('test_url_for', num=2))
     return 'Test page'
 
+# 数据库模型
 class User(db.Model):  # 表名将会是 user（自动生成，小写处理）
     id = db.Column(db.Integer, primary_key=True)  # 主键
     name = db.Column(db.String(20))  # 名字
@@ -68,6 +81,8 @@ class Movie(db.Model):  # 表名将会是 movie
     title = db.Column(db.String(60))  # 电影标题
     year = db.Column(db.String(4))  # 电影年份
 
+
+# 自定义命令
 @app.cli.command() # 注册为命令，可以传入 name 参数来自定义命令
 @click.option('--drop', is_flag=True, help='Create after drop.') # 设置选项
 def initdb(drop):
@@ -105,3 +120,6 @@ def forge():
     
     db.session.commit()
     click.echo('Done')
+
+
+
