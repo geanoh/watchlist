@@ -84,3 +84,13 @@ nav li a:hover {
     border-radius: 5px;
     padding: 3px 5px;
 }
+
+.douban {
+    font-size: 12px;
+    font-weight: bold;
+    color: black;
+    text-decoration:none;
+    background: #11ce0a;
+    border-radius: 5px;
+    padding: 3px 5px;
+}
