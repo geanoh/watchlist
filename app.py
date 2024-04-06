@@ -208,7 +208,7 @@ def forge():
         db.session.add(movie)
     
     db.session.commit()
-    click.echo('Done')
+    click.echo('Done.')
 
 # 创建一个用于显示编辑页面和处理编辑表单提交请求的视图函数
 @app.route('/movie/edit/<int:movie_id>', methods=['GET', 'POST'])
